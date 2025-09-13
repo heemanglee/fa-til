@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+from user.interface.controller.user_controller import user_router
 
-@app.get("/")
-def main():
-    return {"message": "hello"}
+app = FastAPI()
+app.include_router(user_router)
