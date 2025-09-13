@@ -1,6 +1,8 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 
+from user.application.user_service import UserService
+
 user_router = APIRouter(prefix="/users")
 
 class CreateUserRequest(BaseModel):
@@ -10,4 +12,11 @@ class CreateUserRequest(BaseModel):
 
 @user_router.post("", status_code=201)
 def create_user(request: CreateUserRequest):
-    return request
+    user_service = UserService()
+    user_service.create_user(
+        name=request.name,
+        email=request.email,
+        password=request.password
+    )
+
+    return "ok"

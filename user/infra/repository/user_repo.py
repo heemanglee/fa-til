@@ -1,5 +1,27 @@
+from database import SessionLocal
+from user.domain.user import User as UserVO
+from user.infra.model.user import User
 from user.repository.user_repo import IUserRepository
 
 
 class UserRepository(IUserRepository):
-    pass
+    def save(self, user: UserVO):
+        new_user = User(
+            id=user.id,
+            name=user.name,
+            email=user.email,
+            password=user.password,
+            created_at=user.created_at,
+            updated_at=user.updated_at
+        )
+
+        with SessionLocal() as db:
+            try:
+                db = SessionLocal()
+                db.add(new_user)
+                db.commit()
+            finally:
+                db.close()
+
+    def find_by_email(self, email: str) -> User :
+        pass
