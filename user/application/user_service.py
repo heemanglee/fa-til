@@ -15,7 +15,7 @@ class UserService:
         self.user_repo: IUserRepository = UserRepository(db)
         self.crypto = Crypto()
 
-    def create_user(self, name: str, email: str, password: str):
+    def create_user(self, name: str, email: str, password: str, memo: str = None):
         _user = None
 
         # 가입되어 있는 이메일일 경우 예외가 발생합니다.
@@ -34,6 +34,7 @@ class UserService:
             name=name,
             email=email,
             password=self.crypto.pwd_context.encrypt(password),
+            memo=memo,
             created_at=now,
             updated_at=now
         )
