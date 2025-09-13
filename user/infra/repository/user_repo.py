@@ -33,7 +33,6 @@ class UserRepository(IUserRepository):
                 name=find_user.name,
                 email=find_user.email,
                 password=find_user.password,
-                memo=find_user.memo,
                 created_at=find_user.created_at,
                 updated_at=find_user.updated_at
             )
@@ -51,7 +50,6 @@ class UserRepository(IUserRepository):
             name=find_user.name,
             email=find_user.email,
             password=find_user.password,
-            memo=find_user.memo,
             created_at=find_user.created_at,
             updated_at=find_user.updated_at
         )
