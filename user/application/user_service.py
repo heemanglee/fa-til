@@ -3,7 +3,7 @@ import ulid
 from fastapi import HTTPException
 
 from user.domain.user import User
-from user.infra.user_repo import UserRepository
+from user.infra.repository.user_repo import UserRepository
 from user.repository.user_repo import IUserRepository
 from utils.crypto import Crypto
 
