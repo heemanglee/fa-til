@@ -10,5 +10,5 @@ class IUserRepository(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def find_by_email(self, email:str) -> User:
+    def find_by_email(self, email: str) -> User:
         raise NotImplementedError

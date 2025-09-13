@@ -1,4 +1,5 @@
 from datetime import datetime
+
 import ulid
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
@@ -11,7 +12,6 @@ from utils.crypto import Crypto
 
 class UserService:
     def __init__(self, db: Session):
-        self.db = db
         self.user_repo: IUserRepository = UserRepository(db)
         self.crypto = Crypto()
 
