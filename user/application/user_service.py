@@ -11,7 +11,6 @@ from utils.crypto import Crypto
 class UserService:
     def __init__(self):
         self.user_repo: IUserRepository = UserRepository()
-        self.ulid = ulid.new()
         self.crypto = Crypto()
 
     def create_user(self, name: str, email: str, password: str):
@@ -29,7 +28,7 @@ class UserService:
 
         now = datetime.now()
         user: User = User(
-            id=self.ulid.generate_id(),
+            id=str(ulid.new()),
             name=name,
             email=email,
             password=self.crypto.pwd_context.encrypt(password),
