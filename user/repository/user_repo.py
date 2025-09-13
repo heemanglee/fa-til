@@ -12,3 +12,11 @@ class IUserRepository(metaclass=ABCMeta):
     @abstractmethod
     def find_by_email(self, email: str) -> User:
         raise NotImplementedError
+
+    @abstractmethod
+    def find_by_id(self, user_id: str) -> User:
+        raise NotImplementedError
+
+    @abstractmethod
+    def update(self, user: User):
+        raise NotImplementedError

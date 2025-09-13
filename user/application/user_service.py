@@ -41,3 +41,21 @@ class UserService:
 
         self.user_repo.save(user)
         return user
+
+    def update_user(
+            self,
+            user_id: str,
+            name: str | None = None,
+            password: str | None = None,
+    ):
+        find_user = self.user_repo.find_by_id(user_id)
+
+        if name:
+            find_user.name = name
+        if password:
+            find_user.password = self.crypto.encrypt(password)
+        find_user.updated_at = datetime.now()
+
+        self.user_repo.update(find_user)
+
+        return find_user
