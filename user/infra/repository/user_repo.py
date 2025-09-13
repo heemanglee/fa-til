@@ -1,4 +1,5 @@
 from fastapi import HTTPException
+from sqlalchemy.orm import Session
 
 from database import SessionLocal
 from user.domain.user import User as UserVO
@@ -7,6 +8,9 @@ from user.repository.user_repo import IUserRepository
 
 
 class UserRepository(IUserRepository):
+    def __init__(self, db: Session):
+        self.db = db
+
     def save(self, user: UserVO):
         new_user = User(
             id=user.id,
@@ -17,17 +21,11 @@ class UserRepository(IUserRepository):
             updated_at=user.updated_at
         )
 
-        with SessionLocal() as db:
-            try:
-                db = SessionLocal()
-                db.add(new_user)
-                db.commit()
-            finally:
-                db.close()
+        self.db.add(new_user)
+        self.db.commit()
 
     def find_by_email(self, email: str) -> UserVO :
-        with SessionLocal() as db:
-            find_user = db.query(User).filter(User.email == email).first()
+        find_user = self.db.query(User).filter(User.email == email).first()
 
         if find_user:
             return UserVO(
