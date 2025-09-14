@@ -64,7 +64,6 @@ class UserRepository(IUserRepository):
         user.password = user_vo.password
 
         self.db.commit()
-        self.db.close()
 
         return user
 
@@ -97,4 +96,3 @@ class UserRepository(IUserRepository):
 
         self.db.delete(user)
         self.db.commit()
-        self.db.close()
