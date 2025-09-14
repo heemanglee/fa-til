@@ -67,3 +67,20 @@ class UserRepository(IUserRepository):
         self.db.close()
 
         return user
+
+    def get_users(self) -> list[UserVO]:
+        users = self.db.query(User).all()
+
+        result: list[UserVO] = []
+        for user in users:
+            result.append(UserVO(
+                id=user.id,
+                name=user.name,
+                email=user.email,
+                password=user.password,
+                memo=user.memo,
+                created_at=user.created_at,
+                updated_at=user.updated_at
+            ))
+
+        return result

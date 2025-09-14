@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from database import get_db
 from user.application.user_service import UserService
+from user.domain.user import User
 
 user_router = APIRouter(prefix="/users")
 
@@ -21,6 +22,13 @@ class UpdateUserRequest(BaseModel):
 def get_user_service(db: Session = Depends(get_db)) -> UserService:
     return UserService(db)
 
+@user_router.get("", status_code=200)
+def get_users(user_service: UserService = Depends(get_user_service)):
+    users = user_service.get_users()
+
+    return {
+        "users": users
+    }
 
 @user_router.post("", status_code=201)
 def create_user(
@@ -48,3 +56,4 @@ def update_user(
     )
 
     return updated_user
+
