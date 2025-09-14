@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, EmailStr
 from sqlalchemy.orm import Session
 
 from database import get_db
@@ -10,13 +10,13 @@ user_router = APIRouter(prefix="/users")
 
 
 class CreateUserRequest(BaseModel):
-    name: str
-    email: str
-    password: str
+    name: str = Field(min_length=2, max_length=32)
+    email: EmailStr = Field(max_length=64)
+    password: str = Field(min_length=8, max_length=32)
 
 class UpdateUserRequest(BaseModel):
-    name: str | None = None
-    password: str | None = None
+    name: str = Field(default=None, min_length=2, max_length=32)
+    password: str = Field(default=None, min_length=8, max_length=32)
 
 
 def get_user_service(db: Session = Depends(get_db)) -> UserService:
