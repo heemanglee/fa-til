@@ -68,8 +68,12 @@ class UserRepository(IUserRepository):
 
         return user
 
-    def get_users(self) -> list[UserVO]:
-        users = self.db.query(User).all()
+    def get_users(self, page: int, items_per_page: int) -> tuple[int, list[UserVO]]:
+        query = self.db.query(User)
+        total_count = query.count()
+
+        offset = (page - 1) * items_per_page
+        users = query.limit(items_per_page).offset(offset).all()
 
         result: list[UserVO] = []
         for user in users:
@@ -83,4 +87,4 @@ class UserRepository(IUserRepository):
                 updated_at=user.updated_at
             ))
 
-        return result
+        return total_count, result

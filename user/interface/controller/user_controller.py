@@ -23,10 +23,16 @@ def get_user_service(db: Session = Depends(get_db)) -> UserService:
     return UserService(db)
 
 @user_router.get("", status_code=200)
-def get_users(user_service: UserService = Depends(get_user_service)):
-    users = user_service.get_users()
+def get_users(
+        user_service: UserService = Depends(get_user_service),
+        page: int = 1,
+        items_per_page: int = 10,
+):
+    total_count, users = user_service.get_users(page, items_per_page)
 
     return {
+        "total_count": total_count,
+        "page": page,
         "users": users
     }
 

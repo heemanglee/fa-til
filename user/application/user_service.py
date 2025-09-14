@@ -15,8 +15,12 @@ class UserService:
         self.user_repo: IUserRepository = UserRepository(db)
         self.crypto = Crypto()
 
-    def get_users(self) -> list[User]:
-        return self.user_repo.get_users()
+    def get_users(
+            self,
+            page: int,
+            items_per_page: int,
+    ) -> tuple[int, list[User]]:
+        return self.user_repo.get_users(page, items_per_page)
 
     def create_user(self, name: str, email: str, password: str, memo: str = None):
         _user = None
