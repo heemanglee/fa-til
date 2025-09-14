@@ -66,3 +66,6 @@ class UserService:
         self.user_repo.update(find_user)
 
         return find_user
+
+    def delete_user(self, user_id: str):
+        self.user_repo.delete(user_id)

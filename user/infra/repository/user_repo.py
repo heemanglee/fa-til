@@ -88,3 +88,13 @@ class UserRepository(IUserRepository):
             ))
 
         return total_count, result
+
+    def delete(self, user_id):
+        user = self.db.query(User).filter(User.id == user_id).first()
+
+        if not user:
+            raise HTTPException(status_code=404, detail=f"User Not Found, userId={user_id}")
+
+        self.db.delete(user)
+        self.db.commit()
+        self.db.close()
