@@ -1,10 +1,11 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field, EmailStr
 from sqlalchemy.orm import Session
 
 from database import get_db
 from user.application.user_service import UserService
-from user.domain.user import User
 
 user_router = APIRouter(prefix="/users")
 
@@ -14,15 +15,38 @@ class CreateUserRequest(BaseModel):
     email: EmailStr = Field(max_length=64)
     password: str = Field(min_length=8, max_length=32)
 
+
+class UserResponse(BaseModel):
+    id: str
+    name: str
+    email: str
+    created_at: datetime
+    updated_at: datetime
+
+
 class UpdateUserRequest(BaseModel):
     name: str = Field(default=None, min_length=2, max_length=32)
     password: str = Field(default=None, min_length=8, max_length=32)
 
 
+class UpdatedUserResponse(BaseModel):
+    id: str
+    email: EmailStr
+    name: str
+    updated_at: datetime
+
+
+class GetUsersResponse(BaseModel):
+    total_count: int
+    page: int
+    users: list[UserResponse]
+
+
 def get_user_service(db: Session = Depends(get_db)) -> UserService:
     return UserService(db)
 
-@user_router.get("", status_code=200)
+
+@user_router.get("", status_code=200, response_model=GetUsersResponse)
 def get_users(
         user_service: UserService = Depends(get_user_service),
         page: int = 1,
@@ -35,6 +59,7 @@ def get_users(
         "page": page,
         "users": users
     }
+
 
 @user_router.post("", status_code=201)
 def create_user(
@@ -49,7 +74,8 @@ def create_user(
 
     return "ok"
 
-@user_router.put("/{user_id}", status_code=200)
+
+@user_router.put("/{user_id}", status_code=200, response_model=UpdatedUserResponse)
 def update_user(
         user_id: str,
         request: UpdateUserRequest,
@@ -62,6 +88,7 @@ def update_user(
     )
 
     return updated_user
+
 
 @user_router.delete("/{user_id}", status_code=204)
 def delete_user(
