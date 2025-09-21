@@ -5,7 +5,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 import logging
 
-from common.auth import create_access_token
+from common.auth import create_access_token, Role
 from user.domain.user import User
 from user.infra.repository.user_repo import UserRepository
 from user.repository.user_repo import IUserRepository
@@ -46,6 +46,7 @@ class UserService:
             email=email,
             password=self.crypto.pwd_context.encrypt(password),
             memo=memo,
+            role=Role.USER,
             created_at=now,
             updated_at=now
         )
@@ -62,7 +63,10 @@ class UserService:
         if not self.crypto.verify(password, find_user.password):
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password")
 
-        access_token = create_access_token(payload={"email": find_user.email})
+        access_token = create_access_token(payload={
+            "email": find_user.email,
+            "role": find_user.role,
+        })
 
         return access_token
 

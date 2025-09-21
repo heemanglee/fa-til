@@ -16,6 +16,7 @@ class UserRepository(IUserRepository):
             name=user.name,
             email=user.email,
             password=user.password,
+            role=user.role,
             memo=user.memo,
             created_at=user.created_at,
             updated_at=user.updated_at
@@ -33,6 +34,7 @@ class UserRepository(IUserRepository):
                 name=find_user.name,
                 email=find_user.email,
                 password=find_user.password,
+                role=find_user.role,
                 created_at=find_user.created_at,
                 updated_at=find_user.updated_at
             )
@@ -50,6 +52,7 @@ class UserRepository(IUserRepository):
             name=find_user.name,
             email=find_user.email,
             password=find_user.password,
+            role=find_user.role,
             created_at=find_user.created_at,
             updated_at=find_user.updated_at
         )
@@ -82,6 +85,7 @@ class UserRepository(IUserRepository):
                 email=user.email,
                 password=user.password,
                 memo=user.memo,
+                role=user.role,
                 created_at=user.created_at,
                 updated_at=user.updated_at
             ))
