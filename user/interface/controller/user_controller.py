@@ -114,14 +114,10 @@ def update_user(
     return updated_user
 
 
-@user_router.delete("/{user_id}", status_code=204)
+@user_router.delete("", status_code=204)
 def delete_user(
-        user_id: str,
+        current_user: CurrentUser = Depends(get_current_user),
         user_service: UserService = Depends(get_user_service)
 ):
-    """
-    현재 문제점: user_id만 알고 있으면 사용자를 삭제할 수 있다.
-    TODO: JWT 인증/인가 도입 시 토큰에서 user_id 추출하여 사용자를 삭제할 수 있도록 한다.
-    """
-
-    user_service.delete_user(user_id=user_id)
+    user_service.delete_user(user_id=current_user.user_id)
+    return "ok"
