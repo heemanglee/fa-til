@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field, EmailStr
 from sqlalchemy.orm import Session
 
-from common.auth import CurrentUser, get_current_user
+from common.auth import CurrentUser, get_current_user, get_admin_user
 from database import get_db
 from user.application.user_service import UserService
 
@@ -56,9 +56,10 @@ def get_user_service(db: Session = Depends(get_db)) -> UserService:
 
 @user_router.get("", status_code=200, response_model=GetUsersResponse)
 def get_users(
-        user_service: UserService = Depends(get_user_service),
         page: int = 1,
         items_per_page: int = 10,
+        user_service: UserService = Depends(get_user_service),
+        current_user: CurrentUser = Depends(get_admin_user),
 ):
     total_count, users = user_service.get_users(page, items_per_page)
 
