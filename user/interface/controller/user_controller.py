@@ -5,6 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field, EmailStr
 from sqlalchemy.orm import Session
 
+from common.auth import CurrentUser, get_current_user
 from database import get_db
 from user.application.user_service import UserService
 
@@ -99,12 +100,12 @@ def login(
 
 @user_router.put("/{user_id}", status_code=200, response_model=UpdatedUserResponse)
 def update_user(
-        user_id: str,
         request: UpdateUserRequest,
+        current_user: CurrentUser = Depends(get_current_user),
         user_service: UserService = Depends(get_user_service)
 ):
     updated_user = user_service.update_user(
-        user_id=user_id,
+        user_id=current_user.user_id,
         name=request.name,
         password=request.password
     )
