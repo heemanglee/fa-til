@@ -1,9 +1,16 @@
+import logging
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 
 from user.interface.controller.user_controller import user_router
+
+# 로깅 설정
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] [%(filename)s:%(lineno)d] %(message)s'
+)
 
 app = FastAPI()
 app.include_router(user_router)

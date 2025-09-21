@@ -1,13 +1,17 @@
 from datetime import datetime
 
 import ulid
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
+import logging
 
+from common.auth import create_access_token
 from user.domain.user import User
 from user.infra.repository.user_repo import UserRepository
 from user.repository.user_repo import IUserRepository
 from utils.crypto import Crypto
+
+logger = logging.getLogger(__name__)
 
 
 class UserService:
@@ -48,6 +52,19 @@ class UserService:
 
         self.user_repo.save(user)
         return user
+
+    def login(self, email: str, password: str):
+        find_user = self.user_repo.find_by_email(email)
+
+        if not find_user:
+            raise HTTPException(status_code=404, detail=f"User not found, email={email}")
+
+        if not self.crypto.verify(password, find_user.password):
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password")
+
+        access_token = create_access_token(payload={"email": find_user.email})
+
+        return access_token
 
     def update_user(
             self,

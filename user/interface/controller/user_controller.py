@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from fastapi import APIRouter, Depends
+from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field, EmailStr
 from sqlalchemy.orm import Session
 
@@ -42,6 +43,11 @@ class GetUsersResponse(BaseModel):
     users: list[UserResponse]
 
 
+class LoginUserResponse(BaseModel):
+    access_token: str
+    token_type: str
+
+
 def get_user_service(db: Session = Depends(get_db)) -> UserService:
     return UserService(db)
 
@@ -73,6 +79,21 @@ def create_user(
     )
 
     return "ok"
+
+@user_router.post("/login", response_model=LoginUserResponse)
+def login(
+        form_data: OAuth2PasswordRequestForm = Depends(OAuth2PasswordRequestForm),
+        user_service: UserService = Depends(get_user_service)
+):
+    access_token = user_service.login(
+        email=form_data.username,
+        password=form_data.password
+    )
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+    }
 
 
 @user_router.put("/{user_id}", status_code=200, response_model=UpdatedUserResponse)
