@@ -15,14 +15,12 @@ class Role(StrEnum):
 
 def create_access_token(
         payload: dict,
-        role: Role,
         expires_delta: timedelta = timedelta(hours=1)
 ):
     now = datetime.utcnow()
     expired = now + expires_delta
 
     payload.update({
-        "role": role,
         "exp": expired,
     })
     encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)

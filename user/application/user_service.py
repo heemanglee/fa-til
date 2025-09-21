@@ -64,6 +64,7 @@ class UserService:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password")
 
         access_token = create_access_token(payload={
+            "user_id": find_user.id,
             "email": find_user.email,
             "role": find_user.role,
         })
