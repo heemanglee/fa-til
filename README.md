@@ -29,3 +29,15 @@ fa-til/
 - **애플리케이션 (Application)**: 비즈니스 유스케이스 조정
 - **인터페이스 (Interface)**: 외부와의 상호작용 (Controller, API)
 - **인프라 (Infrastructure)**: 데이터베이스, 외부 서비스 연동 (가장 구체적, 저수준)
+
+## 환경 변수
+
+```text
+DB_USERNAME=
+DB_PASSWORD=
+DB_HOST=
+DB_PORT=
+DB_NAME=
+
+JWT_SECRET=
+```
