@@ -4,6 +4,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 
+from note.interface.controller.note_controller import note_router
 from user.interface.controller.user_controller import user_router
 
 # 로깅 설정
@@ -14,6 +15,7 @@ logging.basicConfig(
 
 app = FastAPI()
 app.include_router(user_router)
+app.include_router(note_router)
 
 
 @app.exception_handler(RequestValidationError)
